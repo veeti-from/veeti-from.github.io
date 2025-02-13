@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>Portfolio</title>
-  <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
   <style>
     .slidecontainer {
       width: 100%;
@@ -43,71 +43,75 @@
 </head>
 <body>
 
-  <form action="/action_page.php">
-    <label for="email">Email:</label>
+  <form id="myForm">
+    <label for="passw">Email:</label>
     <input type="password" id="email" name="email"><br><br>
     
     <label for="pwd">Password:</label>
     <input type="text" id="pwd" name="pwd" minlength="8"><br><br>
+
+    <p>What year of human history were you born in?</p>
+
+    <div class="slidecontainer">
+      <input type="range" min="-260000" max="2025" value="-131012" class="slider" id="yearRange">
+      <p>Year: <span id="yearDisplay"></span></p>
+    </div>
+
+    <div class="slidecontainer">
+      <input type="range" min="0.00" max="365.00" step="0.01" value="0.0" class="slider" id="daysRange">
+      <p>Day (has to be a whole number): <span id="daysDisplay"></span></p>
+    </div>
+
+    <input type="submit" id="submitBtn" value="Submit">
   </form>
 
-  <p>What year of human history were you born in?</p>
-
-  <div class="slidecontainer">
-    <input type="range" min="-260000" max="2025" value="-131012" class="slider" id="yearRange">
-    <p>Year: <span id="yearDisplay"></span></p>
-  </div>
-
-  <div class="slidecontainer">
-    <input type="range" min="0.00" max="365.00" step="0.01" value="0.0" class="slider" id="daysRange">
-    <p>Day (has to be a whole number): <span id="daysDisplay"></span></p>
-  </div>
-
   <script>
+    window.onload = function() {
+      var yearSlider = document.getElementById("yearRange");
+      var yearOutput = document.getElementById("yearDisplay");
+      yearOutput.innerHTML = yearSlider.value;
 
-    var yearSlider = document.getElementById("yearRange");
-    var yearOutput = document.getElementById("yearDisplay");
-    yearOutput.innerHTML = yearSlider.value;
-
-    yearSlider.oninput = function() {
-      yearOutput.innerHTML = this.value;
-    }
-
-    yearSlider.addEventListener("keydown", function(event) {
-      if (event.key.startsWith("Arrow")) {
-        event.preventDefault();
+      yearSlider.oninput = function() {
+        yearOutput.innerHTML = this.value;
       }
-    });
 
-    var daysSlider = document.getElementById("daysRange");
-    var daysOutput = document.getElementById("daysDisplay");
-    var submitButton = document.getElementById("submitBtn");
+      yearSlider.addEventListener("keydown", function(event) {
+        if (event.key.startsWith("Arrow")) {
+          event.preventDefault();
+        }
+      });
 
-    daysOutput.innerHTML = daysSlider.value;
+      var daysSlider = document.getElementById("daysRange");
+      var daysOutput = document.getElementById("daysDisplay");
+      var passwordInput = document.getElementById("pwd");
+      var form = document.getElementById("myForm");
 
-    daysSlider.oninput = function() {
-      daysOutput.innerHTML = this.value;
-      checkIfWholeNumber();
-    }
+      daysOutput.innerHTML = daysSlider.value;
 
-    daysSlider.addEventListener("keydown", function(event) {
-      if (event.key.startsWith("Arrow")) {
-        event.preventDefault();
+      daysSlider.oninput = function() {
+        daysOutput.innerHTML = this.value;
       }
-    });
 
-    function checkIfWholeNumber() {
-      var daysValue = parseFloat(daysSlider.value);
-      if (Number.isInteger(daysValue)) {
-        submitButton.disabled = false;
-      } else {
-        submitButton.disabled = true;
-      }
+      daysSlider.addEventListener("keydown", function(event) {
+        if (event.key.startsWith("Arrow")) {
+          event.preventDefault();
+        }
+      });
+
+      form.addEventListener("submit", function(event) {
+        var daysValue = parseFloat(daysSlider.value);
+        var passwordValue = passwordInput.value;
+
+        if (!Number.isInteger(daysValue)) {
+          alert("Error: The day must be a whole number.");
+          event.preventDefault();
+        } else if (passwordValue.length < 8) {
+          alert("Error: Password must be at least 8 characters long.");
+          event.preventDefault();
+        }
+      });
     }
-
   </script>
-
-  <input type="submit" id="submitBtn" disabled>
 
 </body>
 </html>
